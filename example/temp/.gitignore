@@ -1,0 +1,9 @@
+#   .gitignore definition for example (offline storage)
+
+#   Do not care about any files in this direcory ...
+*/**
+*.*
+
+#   ... but these.
+!README.md
+!.gitignore

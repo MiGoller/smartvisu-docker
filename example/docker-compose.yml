@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  app:
+    build: ..
+    # image: migoller/smartvisu
+    networks:
+      - default
+    volumes:
+      # Map date and time settings from Docker host
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      # Offline storage for demo (DO map in productional environments, too)
+      - ./temp:/var/www/html/temp
+      # Your smartVISU global configuration file
+      - ./config.ini/:/var/www/html/config.ini
+      # Your custom smartVISU page
+      - ./mypage/:/var/www/html/pages/mypage
+    
+    # Run as user with id=1001 and gid=1001. Set to something that matches your needs!
+    user: 1001:1001
+  
+  web:
+    image: nginx
+    ports:
+      - 8080:80
+    links:
+      - app
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    volumes_from:
+      - app

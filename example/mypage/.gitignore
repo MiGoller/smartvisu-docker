@@ -1,0 +1,10 @@
+# .gitignore definition for custom page (example)
+
+#   Do not care about any files in this direcory ...
+*/**
+*.*
+visu.*
+
+#   ... but these.
+!README.md
+!.gitignore
