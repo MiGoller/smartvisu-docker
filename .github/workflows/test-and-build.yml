@@ -225,18 +225,18 @@ jobs:
           tags: |
             ghcr.io/${{ steps.image_information.outputs.IMAGE_ID }}:${{ steps.image_information.outputs.IMAGE_REF }}
 
-      # - name: Build and push multi-arch Docker images for branch main
-      #   id: multi-arch_docker_build
-      #   if: (github.base_ref == 'refs/heads/main')
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: .
-      #     file: ./Dockerfile
-      #     platforms: linux/amd64
-      #     push: true
-      #     build-args: |
-      #       ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
-      #       ARG_PHP_VERSION=${{ env.SMARTVISU_PHP_VERSION }}
-      #     tags: |
-      #       ${{ steps.image_information.outputs.IMAGE_ID }}:${{ steps.image_information.outputs.IMAGE_REF }}
-      #       ghcr.io/${{ steps.image_information.outputs.IMAGE_ID }}:${{ steps.image_information.outputs.IMAGE_REF }}
+      - name: Build and push multi-arch Docker images for branch main
+        id: multi-arch_docker_build
+        if: (github.base_ref == 'refs/heads/main')
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          build-args: |
+            ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
+            ARG_PHP_VERSION=${{ env.SMARTVISU_PHP_VERSION }}
+          tags: |
+            ${{ steps.image_information.outputs.IMAGE_ID }}:${{ steps.image_information.outputs.IMAGE_REF }}
+            ghcr.io/${{ steps.image_information.outputs.IMAGE_ID }}:${{ steps.image_information.outputs.IMAGE_REF }}
