@@ -22,6 +22,7 @@ env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: "smartvisu"
   SMARTVISU_REF_MAIN: "refs/heads/master"
+  SMARTVISU_PHP_VERSION: "7"
 
 jobs:
   # Run tests.
@@ -78,17 +79,38 @@ jobs:
           
           echo "${APP_VERSION}"
 
-      - name: Run build tests
-        id: build_test
+      - name: Run Docker compose tests
+        id: compose_test
         run: |
           # mkdir src
           # curl -L https://github.com/Martin-Gleiss/smartvisu/archive/${{ env.SMARTVISU_REF_MAIN }}.tar.gz | tar -xz --strip-components=1 -C ./src
           if [ -f docker-compose.test.yml ]; then
-            docker-compose --file docker-compose.test.yml build
+            docker-compose --file docker-compose.test.yml build --build-arg ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }} --build-arg ARG_PHP_VERSION=${{ env.SMARTVISU_PHP_VERSION }}
             docker-compose --file docker-compose.test.yml run sut
-          else
-            docker build . --file Dockerfile --build-arg ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
+          # else
+          #   docker build . --file Dockerfile --build-arg ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
           fi
+      
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Multi-arch build tests
+        id: multi-arch_build_test
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: false
+            build-args: |
+              ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
+              ARG_PHP_VERSION=${{ env.SMARTVISU_PHP_VERSION }}
+#         tags: |
+#           ${{ steps.image_information.outputs.IMAGE_ID }}:${{ steps.image_information.outputs.IMAGE_REF }}
+#           ghcr.io/${{ steps.image_information.outputs.IMAGE_ID }}:${{ steps.image_information.outputs.IMAGE_REF }}
 
   # multi:
   #   # Ensure test job passes before pushing image.
