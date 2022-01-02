@@ -44,10 +44,18 @@ jobs:
             docker build . --file Dockerfile
           fi
 
-      - name: Check if data is available in a new step
+      - name: Some tries
         run: |
           ls ./src -al
-          
+          APP_VERSION=$( cat ./src/version-info.php | grep \'config_version\' | awk '{split($0,a,"'\''"); print a[4]}' )
+          APP_VERSION_MAJOR=$( cat ./src/version-info.php | grep \'config_version_major\' | awk '{split($0,a,"'\''"); print a[4]}' )
+          APP_VERSION_MINOR=$( cat ./src/version-info.php | grep \'config_version_minor\' | awk '{split($0,a,"'\''"); print a[4]}' )
+          APP_VERSION_REVISION=$( cat ./src/version-info.php | grep \'config_version_revision\' | awk '{split($0,a,"'\''"); print a[4]}' )
+          echo ::set-output name=APP_VERSION::${APP_VERSION}
+          echo ::set-output name=APP_VERSION_MAJOR::${APP_VERSION_MAJOR}
+          echo ::set-output name=APP_VERSION_MINOR::${APP_VERSION_MINOR}
+          echo ::set-output name=APP_VERSION_REVISION::${APP_VERSION_REVISION}
+
   # multi:
   #   # Ensure test job passes before pushing image.
   #   needs: test
