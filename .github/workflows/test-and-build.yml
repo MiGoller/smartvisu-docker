@@ -223,7 +223,6 @@ jobs:
             ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
             ARG_PHP_VERSION=${{ env.SMARTVISU_PHP_VERSION }}
           tags: |
-            # ${{ steps.image_information.outputs.IMAGE_ID }}:${{ steps.image_information.outputs.IMAGE_REF }}
             ghcr.io/${{ steps.image_information.outputs.IMAGE_ID }}:${{ steps.image_information.outputs.IMAGE_REF }}
 
       # - name: Build and push multi-arch Docker images for branch main
