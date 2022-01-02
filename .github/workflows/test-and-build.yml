@@ -78,8 +78,8 @@ jobs:
 
       - name: Run build tests
         run: |
-          mkdir src
-          curl -L https://github.com/Martin-Gleiss/smartvisu/archive/${{ env.SMARTVISU_REF_MAIN }}.tar.gz | tar -xz --strip-components=1 -C ./src
+          # mkdir src
+          # curl -L https://github.com/Martin-Gleiss/smartvisu/archive/${{ env.SMARTVISU_REF_MAIN }}.tar.gz | tar -xz --strip-components=1 -C ./src
           if [ -f docker-compose.test.yml ]; then
             docker-compose --file docker-compose.test.yml build
             docker-compose --file docker-compose.test.yml run sut
