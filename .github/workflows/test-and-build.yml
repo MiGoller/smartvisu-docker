@@ -104,7 +104,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64
           push: false
           build-args: |
             ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
@@ -188,9 +188,11 @@ jobs:
         id: image_information
         run: |
           IMAGE_ID=${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
+          echo "Image-ID = ${IMAGE_ID}"
 
           # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          IMAGE_ID=$(echo "${IMAGE_ID}" | tr '[A-Z]' '[a-z]')
+          echo "Image-ID = ${IMAGE_ID}"
 
           # # Strip git ref prefix from version
           # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
@@ -200,10 +202,11 @@ jobs:
 
           # Use Docker `latest` tag convention
           VERSION=${{ steps.version_information.outputs.APP_VERSION }}
-          [ "${{ github.base_ref }}" == "refs/tags/main" ] && VERSION=latest
-          [ "${{ github.ref }}" == "refs/tags/develop" ] && VERSION=develop
+          [ "${{ github.base_ref }}" == "refs/heads/main" ] && VERSION=latest
+          [ "${{ github.ref }}" == "refs/heads/develop" ] && VERSION=develop
 
-          echo "Image name: ${IMAGE_ID}:${VERSION}"
+          echo "Image-ID = ${IMAGE_ID}"
+          echo "--> Image name: ${IMAGE_ID}:${VERSION}"
           echo ::set-output name=IMAGE_ID::${IMAGE_ID}
           echo ::set-output name=IMAGE_REF::${VERSION}
 
@@ -214,7 +217,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           build-args: |
             ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
