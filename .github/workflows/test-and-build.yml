@@ -33,16 +33,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run tests
+      - name: Download smartVISU
         run: |
           mkdir src
           curl -L https://github.com/Martin-Gleiss/smartvisu/archive/${{ env.SMARTVISU_REF_MAIN }}.tar.gz | tar -xz --strip-components=1 -C ./src
-          if [ -f docker-compose.test.yml ]; then
-            docker-compose --file docker-compose.test.yml build
-            docker-compose --file docker-compose.test.yml run sut
-          else
-            docker build . --file Dockerfile
-          fi
+          # if [ -f docker-compose.test.yml ]; then
+          #   docker-compose --file docker-compose.test.yml build
+          #   docker-compose --file docker-compose.test.yml run sut
+          # else
+          #   docker build . --file Dockerfile
+          # fi
 
       - name: Version_Information
         run: |
@@ -51,7 +51,7 @@ jobs:
           APP_VERSION_MAJOR=$( cat ./src/version-info.php | grep \'config_version_major\' | awk '{split($0,a,"'\''"); print a[4]}' )
           APP_VERSION_MINOR=$( cat ./src/version-info.php | grep \'config_version_minor\' | awk '{split($0,a,"'\''"); print a[4]}' )
           APP_VERSION_REVISION=$( cat ./src/version-info.php | grep \'config_version_revision\' | awk '{split($0,a,"'\''"); print a[4]}' )
-          cat ./src/version-info.php
+          # cat ./src/version-info.php
 
           if [[ -z "${APP_VERSION}" ]]; then
             [[ -z "${APP_VERSION_MAJOR}" ]] && APP_VERSION_MAJOR="0"
@@ -75,6 +75,17 @@ jobs:
           echo ::set-output name=APP_VERSION_REVISION::${APP_VERSION_REVISION}
           
           echo "${APP_VERSION}"
+
+      - name: Run build tests
+        run: |
+          mkdir src
+          curl -L https://github.com/Martin-Gleiss/smartvisu/archive/${{ env.SMARTVISU_REF_MAIN }}.tar.gz | tar -xz --strip-components=1 -C ./src
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose --file docker-compose.test.yml build
+            docker-compose --file docker-compose.test.yml run sut
+          else
+            docker build . --file Dockerfile --build-arg ARG_APP_VERSION=${{ steps.Version_Information.outputs.APP_VERSION }}
+          fi
 
   # multi:
   #   # Ensure test job passes before pushing image.
