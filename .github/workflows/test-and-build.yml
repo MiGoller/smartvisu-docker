@@ -21,7 +21,7 @@ on:
 env:
   # TODO: Change variable to your image's name.
   IMAGE_NAME: "smartvisu"
-  SMARTVISU_REF_MAIN: "refs/head/master"
+  SMARTVISU_REF_MAIN: "refs/heads/master"
 
 jobs:
   # Run tests.
