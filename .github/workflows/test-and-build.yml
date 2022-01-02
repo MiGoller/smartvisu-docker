@@ -36,6 +36,10 @@ jobs:
       - name: Download smartVISU
         id: download_smartvisu_test
         run: |
+          echo "github.event_name = ${{ github.event_name }}"
+          echo "github.ref = ${{ github.ref }}"
+          echo "github.base_ref = ${{ github.base_ref }}"
+
           mkdir src
           curl -L https://github.com/Martin-Gleiss/smartvisu/archive/${{ env.SMARTVISU_REF_MAIN }}.tar.gz | tar -xz --strip-components=1 -C ./src
           # if [ -f docker-compose.test.yml ]; then
@@ -183,7 +187,7 @@ jobs:
       - name: Get Docker image information
         id: image_information
         run: |
-          IMAGE_ID=${{ github.repository_owner }}/$IMAGE_NAME
+          IMAGE_ID=${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -209,7 +213,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64
           push: true
           build-args: |
             ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
