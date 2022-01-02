@@ -36,6 +36,7 @@ jobs:
       - name: Download smartVISU
         id: download_smartvisu_test
         run: |
+          echo "github.event_name = ${{ github.event_name }}"
           echo "github.ref = ${{ github.ref }}"
           echo "github.base_ref = ${{ github.base_ref }}"
 
@@ -212,7 +213,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64
           push: true
           build-args: |
             ARG_APP_VERSION=${{ steps.version_information.outputs.APP_VERSION }}
