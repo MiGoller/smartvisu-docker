@@ -44,7 +44,7 @@ jobs:
             docker build . --file Dockerfile
           fi
 
-      - name: Some tries
+      - name: Some_tries
         run: |
           ls ./src -al
           APP_VERSION=$( cat ./src/version-info.php | grep \'config_version\' | awk '{split($0,a,"'\''"); print a[4]}' )
@@ -55,6 +55,7 @@ jobs:
           echo ::set-output name=APP_VERSION_MAJOR::${APP_VERSION_MAJOR}
           echo ::set-output name=APP_VERSION_MINOR::${APP_VERSION_MINOR}
           echo ::set-output name=APP_VERSION_REVISION::${APP_VERSION_REVISION}
+          echo "${{ steps.Some_tries.outputs.APP_VERSION }}"
 
   # multi:
   #   # Ensure test job passes before pushing image.
