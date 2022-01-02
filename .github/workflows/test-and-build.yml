@@ -43,6 +43,11 @@ jobs:
           else
             docker build . --file Dockerfile
           fi
+
+      - name: Check if data is available in a new step
+        run: |
+          ls ./src -al
+          
   # multi:
   #   # Ensure test job passes before pushing image.
   #   needs: test
