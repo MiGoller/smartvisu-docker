@@ -51,11 +51,12 @@ jobs:
           APP_VERSION_MAJOR=$( cat ./src/version-info.php | grep \'config_version_major\' | awk '{split($0,a,"'\''"); print a[4]}' )
           APP_VERSION_MINOR=$( cat ./src/version-info.php | grep \'config_version_minor\' | awk '{split($0,a,"'\''"); print a[4]}' )
           APP_VERSION_REVISION=$( cat ./src/version-info.php | grep \'config_version_revision\' | awk '{split($0,a,"'\''"); print a[4]}' )
+          cat ./src/version-info.php
           echo ::set-output name=APP_VERSION::${APP_VERSION}
           echo ::set-output name=APP_VERSION_MAJOR::${APP_VERSION_MAJOR}
           echo ::set-output name=APP_VERSION_MINOR::${APP_VERSION_MINOR}
           echo ::set-output name=APP_VERSION_REVISION::${APP_VERSION_REVISION}
-          echo "${{ steps.Some_tries.outputs.APP_VERSION }}"
+          echo "${APP_VERSION}"
 
   # multi:
   #   # Ensure test job passes before pushing image.
