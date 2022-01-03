@@ -28,7 +28,7 @@ jobs:
   # See also https://docs.docker.com/docker-hub/builds/automated-testing/
   test:
     runs-on: ubuntu-latest
-    if: contains('pull_request', github.event_name)
+    if: (github.event_name == 'pull_request' && (github.base_ref == 'refs/heads/main' || github.base_ref == 'refs/heads/develop'))
         || (github.event_name == 'push' && github.ref != 'refs/heads/main')
     steps:
       - uses: actions/checkout@v2
