@@ -18,7 +18,9 @@ LABEL org.label-schema.build-date=${ARG_BUILD_DATE} \
     org.label-schema.vcs-type="Git" \
     org.label-schema.vcs-url="https://github.com/MiGoller/smartvisu-docker.git" \
     maintainer="MiGoller" \
-    Author="MiGoller"
+    Author="MiGoller" \
+    org.opencontainers.image.description="A smartVISU Docker php-fpm image." \
+    org.opencontainers.image.source="https://github.com/MiGoller/smartvisu-docker"
 
 # Persist app-reladted build arguments
 ENV APP_VERSION=$ARG_APP_VERSION
