@@ -3,6 +3,10 @@ name: Automated builds
 on:
   workflow_dispatch:
 
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    - cron:  '5 8 * * 6'
+
 env:
   IMAGE_NAME: "smartvisu"
   SMARTVISU_REF_MAIN: "refs/heads/master"
