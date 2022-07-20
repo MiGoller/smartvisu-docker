@@ -1,3 +1,5 @@
+name: Automated builds
+
 on:
   workflow_dispatch:
 
